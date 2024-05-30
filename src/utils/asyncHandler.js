@@ -1,13 +1,14 @@
 //promises systex
-const aysncHandler=(requestHandler)=>{
+const asyncHandler=(fn)=>{
     return (req,res,next)=>{
-    Promise.resolve(requestHandler(req,res,next)).catch((err)=>next(err))
+    //for better understanding it takes a fn() and it return the fn() if promise is reloved and we can handle later using .then().catch())
+    Promise.resolve(fn(req,res,next)).catch((err)=>next(err))
     }
 }
 
 // }
 
-export { aysncHandler }
+export { asyncHandler }
 
 //its a higher order function
 // step1->step2->step3
@@ -17,16 +18,17 @@ export { aysncHandler }
 
 
         //try-catch syntex
-const aysncHandler1 = (fn) => async (req, res, next) => {
-    try {
-        await fn(req,res,next)
-    } catch (error) {
-        res.status(error.code || 500).json({
-            sucess: false,
-            massage: error.massage
-        })
-    }
-}
+// const aysncHandler1 = (fn) => async (req, res, next) => {
+//     try {
+//         await fn(req,res,next)
+//     } catch (error) {
+//         res.status(error.code || 500).json({
+//             sucess: false,
+//             massage: error.massage
+//         })
+//     }
+// }
+//aysncHandler1()
 
 // this is similer to above code->
 // // Define a function called asyncHandler
