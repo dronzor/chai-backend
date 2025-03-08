@@ -5,6 +5,7 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
 const registerUser= asyncHandler( async(req,res)=>{
+    //
     //get user detail from frontend(postman)
     //validation-not empty
     //check user if already exist: usernsme,email
