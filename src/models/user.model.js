@@ -4,7 +4,7 @@ import bcrypt from "bcrypt"
 
 const userSchema=new Schema(
     {
-        usrname:{
+        username:{
             type:String,
             required:true,
             unique:true,
@@ -33,7 +33,7 @@ const userSchema=new Schema(
             required:true
 
         },
-        coveriImage:{
+        coverImage:{
             type:String
         },
         watchHistory:[
@@ -55,6 +55,7 @@ const userSchema=new Schema(
         timestamps:true
     }
 )
+
 userSchema.pre("save", async function name(next) {
     if(!this.isModified("password")){
         return next()
@@ -62,9 +63,12 @@ userSchema.pre("save", async function name(next) {
     this.password=await bcrypt.hash(this.password,10)
     next()
 })
+
 userSchema.methods.isPasswordCorrect=async function(password){
     return await bcrypt.compare(password,this.password)
 }
+
+//access token
 userSchema.methods.generateaccessToken=async function(){
     return await Jwt.sign({
         _id:this._id,
@@ -79,8 +83,10 @@ userSchema.methods.generateaccessToken=async function(){
         
     
 }
+
+//refresh token
 userSchema.methods.generateRefreshToken=async function(){
-    return await jwt.sign({
+    return await Jwt.sign({
         _id:this._id
         
     }),
@@ -89,4 +95,5 @@ userSchema.methods.generateRefreshToken=async function(){
         expiresIn:process.env.REFRESH_TOKEN_EXPIRY
     }
 }
+
 export const User=mongoose.model("User",userSchema)
