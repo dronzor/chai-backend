@@ -46,7 +46,7 @@ const userSchema=new Schema(
             type:String,
             required:[true,"password required"]
         },
-        refreshtoken:{
+        refreshToken:{
             type:String
         }
         
@@ -69,31 +69,33 @@ userSchema.methods.isPasswordCorrect=async function(password){
 }
 
 //access token
-userSchema.methods.generateaccessToken=async function(){
-    return await Jwt.sign({
-        _id:this._id,
-        email:this.email,
-        username:this.username,
-        fullName:this.fullName
-    }),
-    process.env.ACCESS_TOKEN_SECRET,
-    {
-        expiresIn:process.env.ACCESS_TOKEN_EXPIRY
-    }
-        
-    
+userSchema.methods.generateaccessToken= function(){
+    return Jwt.sign(
+        {
+            _id:this._id,
+            email:this.email,
+            username:this.username,
+            fullName:this.fullName
+        },
+        process.env.ACCESS_TOKEN_SECRET,
+        {
+            expiresIn:process.env.ACCESS_TOKEN_EXPIRY
+        }
+    );
+
 }
 
 //refresh token
-userSchema.methods.generateRefreshToken=async function(){
-    return await Jwt.sign({
-        _id:this._id
-        
-    }),
-    process.env.REFRESH_TOKEN_SECRET,
-    {
-        expiresIn:process.env.REFRESH_TOKEN_EXPIRY
-    }
+userSchema.methods.generateRefreshToken= function(){
+     return Jwt.sign(
+        {
+            _id: this._id
+        },
+        process.env.REFRESH_TOKEN_SECRET,
+        {
+            expiresIn: process.env.REFRESH_TOKEN_EXPIRY
+        }
+    );
 }
 
 export const User=mongoose.model("User",userSchema)
